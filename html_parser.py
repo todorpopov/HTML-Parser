@@ -37,9 +37,10 @@ class HTML_file():
         for i in range(len(self.file_content)):
             content_dict = {}
             closing_tag = self.file_content[i][:1] + "/" + self.file_content[i][1:]
+
             #body/html cases
-            if self.file_content[i] == "<html>" or self.file_content[i] == \
-                "<head>" or self.file_content[i] == "<body>":
+            if self.file_content[i] in ["<html>", "</html>"] or self.file_content[i] in ["<head>", "</head>"] \
+                or self.file_content[i] in ["<body>", "</body>"]:
                 content_dict["tag"] = self.file_content[i]
                 if self.file_content[i] == "<html>":
                     content_dict["parent"] = "none"
@@ -47,7 +48,7 @@ class HTML_file():
                     content_dict["parent"] = "<html>"
                 self.parsed_text.append(content_dict)
 
-            #one-liner, ordinary, tags
+            #one-liners - ordinary tags
             elif contains(self.file_content[i], open_tags) and \
                 contains(self.file_content[i+1], close_tags):
 
@@ -58,11 +59,20 @@ class HTML_file():
                 self.parsed_text.append(content_dict)
             
             #todo: tags spanning multiple lines, other tags
-            elif contains(self.file_content[i], open_tags) and self.file_content[i+1] != closing_tag:
+            elif contains(self.file_content[i], open_tags) and \
+                self.file_content[i+1] != closing_tag:
 
                 tag = self.file_content[i]
                 parent = find_parent(i, self.file_content)
                 content_dict = {"tag": tag, "parent": parent}
                 self.parsed_text.append(content_dict)
+            
+            else:
+                
+                tag = self.file_content[i]
+                parent = find_parent(i, self.file_content)
+                content_dict = {"tag": tag, "parent": parent}
+                self.parsed_text.append(content_dict)
+
 
     #def display_html(self):
