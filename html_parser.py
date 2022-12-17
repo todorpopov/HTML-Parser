@@ -39,8 +39,10 @@ class HTML_file():
             closing_tag = self.file_content[i][:1] + "/" + self.file_content[i][1:]
 
             #body/html cases
-            if self.file_content[i] in ["<html>", "</html>"] or self.file_content[i] in ["<head>", "</head>"] \
+            if self.file_content[i] in ["<html>", "</html>"] or \
+                self.file_content[i] in ["<head>", "</head>"] \
                 or self.file_content[i] in ["<body>", "</body>"]:
+
                 content_dict["tag"] = self.file_content[i]
                 if self.file_content[i] == "<html>":
                     content_dict["parent"] = "none"
@@ -68,7 +70,6 @@ class HTML_file():
                 self.parsed_text.append(content_dict)
             
             else:
-                
                 tag = self.file_content[i]
                 parent = find_parent(i, self.file_content)
                 content_dict = {"tag": tag, "parent": parent}
