@@ -1,6 +1,6 @@
 import sys
 
-from html_parser import html_file
+from html_parser import HTML_file
 
 argument = sys.argv[1]
 
@@ -9,7 +9,7 @@ try:
 except:
     print("Incorrect filename!")
 
-file_content = html_file(file_name)
+file_content = HTML_file(file_name)
 file_content.extract_content()
 print("=======================================")
 print("Extracted list of html elements:\n")

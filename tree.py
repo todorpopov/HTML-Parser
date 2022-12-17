@@ -1,3 +1,5 @@
 class Node():
-    def __init__(self, tag, content, status):
+    def __init__(self, tag, content):
+        self.tag = tag
+        self.content = content
         

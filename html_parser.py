@@ -12,10 +12,14 @@ def contains(text, list_of_substr):
             return True
     return False
 
-# def find_parent(index, list): 
-
-
-class html_file():
+def find_parent(index, list): 
+    for i in range(1, len(list)):
+        closing_tag = list[index - i][:1] + "/" + list[index - i][1:]
+        if contains(list[index - i], open_tags) and closing_tag in list[index:]:
+            return list[index - i]
+    else:
+        return "none"
+class HTML_file():
     def __init__(self, filename):
         self.filename = filename
 
@@ -31,29 +35,34 @@ class html_file():
     def parse_html(self):
         self.parsed_text = []
         for i in range(len(self.file_content)):
-
+            content_dict = {}
+            closing_tag = self.file_content[i][:1] + "/" + self.file_content[i][1:]
             #body/html cases
             if self.file_content[i] == "<html>" or self.file_content[i] == \
                 "<head>" or self.file_content[i] == "<body>":
-                current_case = {}
-                current_case["type"] = self.file_content[i].strip("<>")
+                content_dict["tag"] = self.file_content[i]
                 if self.file_content[i] == "<html>":
-                    current_case["parent"] = "none"
+                    content_dict["parent"] = "none"
                 else:
-                    current_case["parent"] = "<html>"
-                self.parsed_text.append(current_case)
+                    content_dict["parent"] = "<html>"
+                self.parsed_text.append(content_dict)
 
             #one-liner, ordinary, tags
-            if contains(self.file_content[i], open_tags) and \
+            elif contains(self.file_content[i], open_tags) and \
                 contains(self.file_content[i+1], close_tags):
+
                 tag = self.file_content[i][0:(self.file_content[i].find(">"))+1]
                 content = self.file_content[i][self.file_content[i].find(">")+1:]
-                type = "nested"
-                content_dict = {}
-                content_dict = {"tag": tag, "content": content, "type": type}
+                parent = find_parent(i, self.file_content)
+                content_dict = {"tag": tag, "content": content, "parent": parent}
                 self.parsed_text.append(content_dict)
             
-            
+            #todo: tags spanning multiple lines, other tags
+            elif contains(self.file_content[i], open_tags) and self.file_content[i+1] != closing_tag:
 
-    def display_html(self):
-        indentation_level = 0
+                tag = self.file_content[i]
+                parent = find_parent(i, self.file_content)
+                content_dict = {"tag": tag, "parent": parent}
+                self.parsed_text.append(content_dict)
+
+    #def display_html(self):
