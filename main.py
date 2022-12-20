@@ -1,17 +1,24 @@
-import sys
-
+import os
 from html_parser import HTML_file
 
-argument = sys.argv[1]
+files = [f for f in os.listdir('.') if os.path.isfile(f)] #makes a list of all files in the current directory
+for f in files: 
+    if ".html" not in f:
+        files.remove(f)
 
-try:
-    file_name = str(argument)
-except:
-    print("Incorrect filename!")
+files_dict = {str(i): f for i, f in enumerate(files)}
 
-file_content = HTML_file(file_name)
+
+print("\nList of '.html' files in the current directory:")
+for key, val in files_dict.items():
+    print(f"\t{key}. {val}")
+
+file_num = input("\nChoose a file(by the corresponding number): ")
+
+file_content = HTML_file(files_dict[file_num])
+print("\n\nOpened file:", files_dict[file_num])
 file_content.extract_content()
-print("=======================================")
+print("\n\n=======================================")
 print("Extracted list of html elements:\n")
 print(file_content.file_content)
 print("\n\n=======================================")
