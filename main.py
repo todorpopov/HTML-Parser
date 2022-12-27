@@ -6,7 +6,7 @@ for f in files:
     if ".html" not in f:
         files.remove(f)
 
-files_dict = {str(i): f for i, f in enumerate(files)}
+files_dict = {str(i): f for i, f in enumerate(files)} # creates a dictionary of the files, using numbers as the keys
 
 
 print("\nList of '.html' files in the current directory:")
