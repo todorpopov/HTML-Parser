@@ -5,20 +5,35 @@ close_tags = ["</html>", "</body>", "</p>", "</div>", "</table>",
         "</tr>", "</td>"]
 
 def contains(text, list_of_substr): 
-    #checks if the given text contains any of the 
-    #substrings in the given list of substrings
+    """
+    checks if the given text contains any of the 
+    substrings in the given list of substrings
+    
+    params: 
+        text: string
+        list of substrings: list
+    returns: boolean
+    """
+
     for i in list_of_substr:
         if i in text:
             return True
     return False
 
 def find_parent(index, list): 
-    # finds the parent tag of an element at a given index in the list
+    """
+    finds the parent tag of an element at a given index in the list
 
-    # needs more optimization, currently, it tries to find the closes 
-    # surrounding tags around an element, and return it as the element's parent
-    # but it doesn't recognize opened and already 
-    # closed tags, which are seen again further down the file
+    !needs more optimization, currently, it tries to find the closes 
+    surrounding tags around an element, and return it as the element's parent
+    but it doesn't recognize opened and already 
+    closed tags, which are seen again further down the file!
+
+    params:
+        index: the index of an element in the list(integer)
+        list: a list of elements(list)
+    returns: either the "parent" tag, or "none" if there isn't one(string)
+    """
 
     for i in range(1, len(list)):
         closing_tag = list[index - i][:1] + "/" + list[index - i][1:]
@@ -26,11 +41,17 @@ def find_parent(index, list):
             return list[index - i]
     else:
         return "none"
+
+
 class HTML_file():
     def __init__(self, filename):
         self.filename = filename
 
     def extract_content(self):
+        """
+        Opens the file, passed through the filename, and appends the content
+        to a list.
+        """
         self.file_content = []
         with open(self.filename, 'r') as f:
             temp = f.read().split("<")
@@ -40,6 +61,8 @@ class HTML_file():
                     self.file_content.append(i.replace("\t", "").strip())
 
     def parse_html(self):
+        """Parses the list of HTML tags"""
+
         # self.parsed_text = []
         # stack = []
         # for tag in self.parsed_text:
@@ -49,14 +72,13 @@ class HTML_file():
         #         parent_tag = stack.pop()
         #         dict = {"tag": tag, "parent": parent_tag}
         #         self.parsed_text.append(dict)
-        #
-        # Trying to find the parent element of every html tag with a stack
-
 
         self.parsed_text = []
         for i in range(len(self.file_content)):
             content_dict = {}
-            closing_tag = self.file_content[i][:1] + "/" + self.file_content[i][1:]
+            closing_tag = self.file_content[i][:1] + \
+                        "/" + \
+                        self.file_content[i][1:]
 
             #body/html cases
             if self.file_content[i] in ["<html>", "</html>"] or \
@@ -97,4 +119,6 @@ class HTML_file():
 
 
 
-    #def display_html(self):
+    def display_html(self):
+        """Displaying the content of the parses HTML file"""
+        return None
